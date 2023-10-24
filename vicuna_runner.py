@@ -3,7 +3,7 @@ import pandas as pd
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
 
-# Function to generate responses from input strings
+# Function to generate responses from input strings (not updated yet)
 def generate_responses(input_csv, output_csv, model_id, device):
     model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")
     tokenizer = AutoTokenizer.from_pretrained(model_id)
