@@ -1,17 +1,3 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-model_id = "lmsys/vicuna-7b-v1.5"
-model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-
-input_text = "Your input text here"
-input_ids = tokenizer(input_text, return_tensors="pt").input_ids
-input_ids = input_ids.to(device=0)
-output = model.generate(input_ids, max_length=50)  # Generate text
-output_text = tokenizer.decode(output[0], skip_special_tokens=True)  # Decode the output
-
-print("Generated text:", output_text)
-
 import sys
 import pandas as pd
 from transformers import AutoModelForCausalLM, AutoTokenizer
