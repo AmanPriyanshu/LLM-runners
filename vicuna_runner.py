@@ -14,7 +14,7 @@ def generate_responses(input_csv, output_csv, model_id, max_length, suffix_strin
     responses = []
 
     for input_text in tqdm(questions):
-        input_ids = tokenizer(input_text+" "+suffix_string, return_tensors="pt").input_ids
+        input_ids = tokenizer(input_text+"\n"+suffix_string, return_tensors="pt").input_ids
         input_ids = input_ids.to("cuda")
         output = model.generate(input_ids, max_length=max_length)
         output_text = tokenizer.decode(output[0], skip_special_tokens=True)
