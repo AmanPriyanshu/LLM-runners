@@ -46,12 +46,15 @@ def main(
     )
 
     dialogs: List[Dialog] = [[{"role": "user", "content": q}] for q in questions]
-    results = generator.chat_completion(
-        dialogs,  # type: ignore
-        max_gen_len=max_gen_len,
-        temperature=temperature,
-        top_p=top_p,
-    )
+    results = []
+    for batch_id_start in range(0, len(dialogs), max_batch_size):
+        r = generator.chat_completion(
+            dialogs[batch_id_start:batch_id_start+max_batch_size],  # type: ignore
+            max_gen_len=max_gen_len,
+            temperature=temperature,
+            top_p=top_p,
+        )
+        results.extend(r)
 
     results = [r['generation']['content'] for r in results]
     df = pd.DataFrame({"questions": questions, "responses": results})
