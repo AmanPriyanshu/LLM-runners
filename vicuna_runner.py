@@ -3,11 +3,10 @@ import pandas as pd
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
 
-# Function to generate responses from input strings (not updated yet)
-def generate_responses(input_csv, output_csv, model_id, device):
+# Function to generate responses from input strings
+def generate_responses(input_csv, output_csv, model_id):
     model = AutoModelForCausalLM.from_pretrained(model_id, device_map="auto")
     tokenizer = AutoTokenizer.from_pretrained(model_id)
-    model.to(device)
 
     df = pd.read_csv(input_csv)
     df = df.values
@@ -16,7 +15,7 @@ def generate_responses(input_csv, output_csv, model_id, device):
 
     for input_text in tqdm(questions):
         input_ids = tokenizer(input_text, return_tensors="pt").input_ids
-        input_ids = input_ids.to(device)
+        input_ids = input_ids.to("cuda")
         output = model.generate(input_ids, max_length=50)
         output_text = tokenizer.decode(output[0], skip_special_tokens=True)
         responses.append([input_text, output_text])
@@ -34,4 +33,4 @@ if __name__ == "__main__":
     model_id = "lmsys/vicuna-7b-v1.5"
     device = 0  # Set your desired GPU device here
 
-    generate_responses(input_csv, output_csv, model_id, device)
+    generate_responses(input_csv, output_csv, model_id)
