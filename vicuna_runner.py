@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from tqdm import tqdm
 
 # Function to generate responses from input strings
 def generate_responses(input_csv, output_csv, model_id, device):
@@ -13,7 +14,7 @@ def generate_responses(input_csv, output_csv, model_id, device):
     questions = [str(prompt) for prompt in df.T[0]]
     responses = []
 
-    for input_text in questions:
+    for input_text in tqdm(questions):
         input_ids = tokenizer(input_text, return_tensors="pt").input_ids
         input_ids = input_ids.to(device)
         output = model.generate(input_ids, max_length=50)
