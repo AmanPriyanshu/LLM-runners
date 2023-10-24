@@ -11,6 +11,7 @@ import numpy as np
 
 
 def main(
+    csv_path: str,
     ckpt_dir: str,
     tokenizer_path: str,
     temperature: float = 0.1,
@@ -34,8 +35,7 @@ def main(
         max_gen_len (int, optional): The maximum length of generated sequences. If None, it will be
             set to the model's max sequence length. Defaults to None.
     """
-    question_list = pd.read_csv("questions.csv")
-    print(questions)
+    question_list = pd.read_csv(csv_path)
     question_list = question_list.values
     questions = [str(item) for item in question_list.T[0]]
     generator = Llama.build(
